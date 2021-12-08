@@ -3,12 +3,6 @@
 const form = document.querySelector("#book-form")
 form.addEventListener("submit", addBook)
 
-function addBook(e){
-    const book = bookInput.value;
-    console.log(book);
-    e.preventDefault();
-}
-
 //Book List
     bookList = document.querySelector("#book-list")
     bookList.addEventListener("click", delBook)
@@ -55,7 +49,7 @@ function addBook(e){
         }
     }
 
-    //removeBook)
+    //removeBook
     function removeBook(book){
         let books
         if(localStorage.getItem("books") === null){

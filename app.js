@@ -1,109 +1,175 @@
 
 //User input form
-const form = document.querySelector("#book-form")
-form.addEventListener("submit", addBook)
+const form = document.querySelector("form");
+const booksList = document.querySelector("#books-list");
 
 //Book List
-    bookList = document.querySelector("#book-list")
-    bookList.addEventListener("click", delBook)
-
-    //Page reload
-    document.addEventListener("DOMContentLoaded", getBooks)
+    form.addEventListener("submit", addBook);
+    booksList.addEventListener("click", deleteBook);
+    document.addEventListener("DOMContentLoaded", getBooksFromLocalStorage);
 
 // getBooks
-    function getBooks(){
+    function getBooksFromLocalStorage(){
         //get data from local storage
-        let books
+        let books;
         if(localStorage.getItem("books") === null){
-            books = []
+            books = [];
         } else {
-            books = JSON.parse(localStorage.getItem("books"))
+            books = JSON.parse(localStorage.getItem("books"));
         }
-        const tr = document.createElement("tr")
-        const trContent =`
- 
-    <td>${title}</td>
-    <td>${author}</td>
-    <td>${isbn}</td>
-    <td><a href="#">X</a></td>`
+        for(let i = 0; i < books.length; i++){
+            let book = books[i];
 
-        tr.innerHTML = trContent
+            // create <tr> element
+            const tr = document.createElement('tr');
+            for(let i = 0; i < book.length; i++){
 
-        bookList = document.querySelector("#book-list")
-        console.log(trContent)
-        bookList.appendChild(tr)
-        })
-    }
+                // create <td> element
+                let td = document.createElement('td');
 
-    //delBook
-    function delBook(event){
-        if(event.target.textContent === "x"){
-            if(confirm("Do you really want to delete this book?")){
-                let isbn = event.target.parentElement.previousElementSibling.textContent
-                let author = event.target.parentElement.previousElementSibling.previousElementSibling.textContent
-                let title = event.target.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.textContent
-                const book = [title, author, isbn]
-                event.target.parentElement.parentElement.remove()
-                removeBook(book)
+                // create text element
+                let text = document.createTextNode(book[i]);
+
+                // add text to <td>
+                td.appendChild(text);
+
+                // add td to tr
+                tr.appendChild(td);
+
+                tr.appendChild(td);
             }
+            // X link
+
+            // create <td> element
+            td = document.createElement('td');
+
+            // create <a> element
+            const link = document.createElement('a');
+
+            // set href attribute to <a>
+            link.setAttribute('href', '#');
+
+            // add text content to <a>
+            link.appendChild(document.createTextNode('X'));
+
+            // add <a> to <li>
+            td.appendChild(link);
+
+            // add td to tr
+            tr.appendChild(td);
+
+            // add tr to tbody
+            booksList.appendChild(tr);
         }
     }
 
-    //removeBook
-    function removeBook(book){
-        let books
-        if(localStorage.getItem("books") === null){
-            books = []
-        } else {
-            books = JSON.parse(localStorage.getItem("books"))
+function deleteBook(event){
+    if(event.target.textContent === 'X'){
+        if(confirm('Do you want to delete this book?')){
+            event.target.parentElement.parentElement.remove();
+            //let bookTitle = event.target.parentElement.parentElement.firstChild.textContent;
+            console.log(event.target.parentElement.previousElementSibling.textContent)
+            //let bookISBN = event.target.parentElement.previousElementSibling.textContent;
+            //deleteBookFromLocalStorage(bookISBN);
         }
-        books.forEach(function(bookFormLS, bookIndex){
-            if(bookFromLS[0] === book[0] && bookFromLS[1] === book[1] && bookFromLS[2] === book[2]){
-                books.splice(taskIndex, 1)
-            }
-        })
-        localStorage.setItem("books", JSON.stringify(books))
     }
+}
+
+function deleteBookFromLocalStorage(bookISBN){
+    let books;
+    if(localStorage.getItem('books') === null){
+        books = [];
+    } else {
+        books = JSON.parse(localStorage.getItem('books'));
+    }
+    /*
+    for(let i = 0; i < books.length; i++){
+        let book = books[i];
+        if(book[2] === bookISBN){
+            books.splice(i, 1);
+        }
+    }
+    */
+
+    books.forEach(function (book, index){
+        if(book[2] === bookISBN){
+            books.splice(index, 1);
+        }
+    });
+
+    localStorage.setItem('books', JSON.stringify(books));
+}
 
 //addBook function
 function addBook(event){
 //get form submit value from form input
-    const title = document.querySelector("#title").value
-    const author = document.querySelector("#author").value
-    const isbn = document.querySelector("#isbn").value
+    const titleInput = document.querySelector("#title");
+    const authorInput = document.querySelector("#author");
+    const isbnInput = document.querySelector("#isbn");
+
+    let title = titleInput.value;
+    let author = authorInput.value;
+    let isbn = isbnInput.value;
+
+    // create book
+    const book = [title, author, isbn]
 
     //create tr DOM element
-    const tr = document.createElement("tr")
-    const trContent =`
- 
-    <td>${title}</td>
-    <td>${author}</td>
-    <td>${isbn}</td>
-    <td><a href="#">X</a></td>`
+    const tr = document.createElement('tr');
+    for(let i = 0; i < book.length; i++){
 
-    tr.innerHTML = trContent
-    bookList.appendChild(tr)
-    //Save to LS
-    const book = [title, author, isbn]
-    saveBook(book)
+        // create <td> element
+        let td = document.createElement('td');
 
-    // clear form input value
-    document.querySelector("#title").value = ""
-    document.querySelector("#author").value = ""
-    document.querySelector("#isbn").value = ""
-    event.preventDefault()
+        // create text element
+        let text = document.createTextNode(book[i]);
+
+        // add text to <td>
+        td.appendChild(text);
+
+        // add td to tr
+        tr.appendChild(td);// add td to tr
+        tr.appendChild(td);
+    }
+
+    // X link
+    // create <td> element
+    td = document.createElement('td');
+
+    // create <a> element
+    const link = document.createElement('a');
+
+    // set href atribute to <a>
+    link.setAttribute('href', '#');
+
+    // add text content to <a>
+    link.appendChild(document.createTextNode('X'));
+
+    // add <a> to <li>
+    td.appendChild(link);
+
+    // add td to tr
+    tr.appendChild(td);
+
+    // add tr to tbody
+    booksList.appendChild(tr);
+
+    // save book
+    addBookToLocalStorage(book);
+    titleInput.value = '';
+    authorInput.value = '';
+    isbnInput.value = '';
+    event.preventDefault();
 }
 
-    //saveBook
-    function saveBook(book){
-        let books
+    function addBookToLocalStorage(book){
+        let books;
         if(localStorage.getItem("books") === null){
-            books = []
+            books = [];
         } else {
-            books = JSON.parse(localStorage.getItem("books"))
+            books = JSON.parse(localStorage.getItem("books"));
         }
-        books.push(book)
-        console.log(books)
-        localStorage.setItem("books", JSON.stringify(books))
+        books.push(book);
+        localStorage.setItem("books", JSON.stringify(books));
     }
 
